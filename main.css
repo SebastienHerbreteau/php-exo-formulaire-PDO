@@ -1,0 +1,13 @@
+*{
+    background-color: bisque;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-family: sans-serif;
+}
+
+h1{
+
+    font-size: 300px;
+}
