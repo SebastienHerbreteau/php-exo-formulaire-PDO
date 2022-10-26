@@ -1,49 +1,47 @@
 <?php
 session_start();
 
-$pseudo = $_POST['pseudo'];
+
+
+$pseudo = htmlspecialchars($_POST['pseudo']);
 $password = $_POST['password'];
 $servname = 'localhost';
 $dbname = 'account';
 $dbuser = 'root';
 $pass = '';
-$serv = "http://phpexoformulairepdo/";
+$index = "http://phpexoformulairepdo/";
+$dashboard = "http://phpexoformulairepdo/dashboard.php";
 $dbco = new PDO("mysql:host=$servname;dbname=$dbname", $dbuser, $pass);
-
-
 
 if(isset($_POST['connexion'])){
     if(!empty($pseudo) AND !empty($password))
     {
-        $user = $dbco->prepare("SELECT * FROM user WHERE pseudo = ? AND password = ?");
-        $user->execute(array($pseudo, $password));
-        $verifUser = $user->fetchAll();
-
+     
         $verifPs = $dbco->prepare("SELECT * FROM user WHERE pseudo = ?");
         $verifPs->execute(array($pseudo));
-        $verifPseudo = $verifPs->fetchAll();
+        $verifPseudo = $verifPs->fetchAll(); 
         
         $verifPas = $dbco->prepare("SELECT password FROM user WHERE pseudo = ?");
         $verifPas->execute(array($pseudo));
         $verifPassword = $verifPas->fetchAll();
-        
-        if(count($verifuser) < 0){
-            $serv .= "?valideconnexion";
-            header('Location:'.$serv );
+
+        if($verifPs->rowCount() == 1 AND password_verify($password,$verifPassword[0]["password"]) ){ 
+            $dashboard .= "?valideconnexion";
+            $_SESSION['user'] = $pseudo;
+            header('Location:'.$dashboard);
         }elseif(!$verifPseudo){
-            $serv .= "?erreurconnexion3";
-            header('Location:'.$serv );
-        }elseif($verifPassword){
-            $serv .= "?erreurconnexion4";
-            // var_dump($verifPassword);
-            header('Location:'.$serv );
+            $index .= "?erreurconnexion3";
+            header('Location:'.$index );
+        }elseif(!password_verify($password,$verifPassword[0]["password"])){
+            $index .= "?erreurconnexion4";
+            header('Location:'.$index );
         }else{
-            $serv .= "?erreurconnexion2";
-            header('Location:'.$serv );
+            $index .= "?erreurconnexion2";
+            header('Location:'.$index );
         }
 
     }else{
-        $serv .= "?erreurconnexion1";
-        header('Location:'.$serv );
+        $index .= "?erreurconnexion1";
+        header('Location:'.$index );
     }
 }
