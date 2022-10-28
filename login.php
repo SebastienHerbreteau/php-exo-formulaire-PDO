@@ -1,17 +1,11 @@
 <?php
 session_start();
-
-
-
+include 'dbco.php';
 $pseudo = htmlspecialchars($_POST['pseudo']);
-$password = $_POST['password'];
-$servname = 'localhost';
-$dbname = 'account';
-$dbuser = 'root';
-$pass = '';
+$password = htmlspecialchars($_POST['password']);
 $index = "http://phpexoformulairepdo/";
 $dashboard = "http://phpexoformulairepdo/dashboard.php";
-$dbco = new PDO("mysql:host=$servname;dbname=$dbname", $dbuser, $pass);
+
 
 if(isset($_POST['connexion'])){
     if(!empty($pseudo) AND !empty($password))

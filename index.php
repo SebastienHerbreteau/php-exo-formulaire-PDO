@@ -2,9 +2,8 @@
 session_start();
 ?>
 
-    <link rel="stylesheet" href="main.css" />
+<link rel="stylesheet" href="main.css" />
 
-<img src="./assets/pasmoi.png" alt="">
 <h2>Inscription</h2>
 <form method="POST" action="register.php">
     <input type="text" name="pseudo">

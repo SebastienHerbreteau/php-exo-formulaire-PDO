@@ -1,25 +1,14 @@
 <?php
 session_start();
-
+include 'dbco.php';
 $pseudo = htmlspecialchars($_POST['pseudo']);
-$password = $_POST['password'];
+$password = htmlspecialchars($_POST['password']);
 $hashed_password = password_hash(($_POST['password']),PASSWORD_DEFAULT);
 $pattern = '/(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z !"#$%&\'()*+,-.\/:;<=>?@\[\\\\\]^_`{|}~]{8,255}/';
-$servname = 'localhost';
-$dbname = 'account';
-$dbuser = 'root';
-$pass = '';
-$sql = "INSERT INTO user (pseudo, password) VALUES('$pseudo', '$hashed_password')";
+$sql = "INSERT INTO user (pseudo, password, role) VALUES('$pseudo', '$hashed_password', 'subscriber')";
 $index = "http://phpexoformulairepdo/";
 $dashboard = "http://phpexoformulairepdo/dashboard.php";
 
-
-try {
-    $dbco = new PDO("mysql:host=$servname;dbname=$dbname", $dbuser, $pass);
-    $dbco->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-} catch (PDOException $e) {
-    echo "Erreur : " . $e->getMessage();
-}
     $verifPs = $dbco->prepare("SELECT * FROM user WHERE pseudo = ?");
     $verifPs->execute(array($pseudo));
     $verifPseudo = $verifPs->fetchAll();
